@@ -1,0 +1,29 @@
+[Unit]
+Description=Kabelmodem DOCSIS Collector (-> InfluxDB)
+After=network-online.target influxdb.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/modem-collector.env
+ExecStart=/usr/bin/python3 -u /opt/modem-collector/modem_collector.py
+Restart=always
+RestartSec=30
+
+# Eigener, unprivilegierter Benutzer und Absicherung
+DynamicUser=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

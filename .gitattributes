@@ -1,0 +1,4 @@
+# Linux-Dateien immer mit LF (sonst landet z. B. ein \r im Passwort)
+* text=auto eol=lf
+# PowerShell-Skripte für Windows mit CRLF
+*.ps1 text eol=crlf

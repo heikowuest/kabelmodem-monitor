@@ -1,0 +1,15 @@
+# Zugangsdaten
+zugang.xml
+*.env
+!*.env.example
+
+# Laufzeitdaten
+*.db
+*.db-journal
+dashboard.log
+modem-dump/
+raw/
+
+# Python
+__pycache__/
+*.pyc
