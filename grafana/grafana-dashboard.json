@@ -28,7 +28,7 @@
   "editable": true,
   "refresh": "1m",
   "schemaVersion": 39,
-  "version": 2,
+  "version": 3,
   "time": {
     "from": "now-24h",
     "to": "now"
@@ -1073,17 +1073,46 @@
             },
             "properties": [
               {
-                "id": "color",
+                "id": "thresholds",
                 "value": {
-                  "mode": "fixed",
-                  "fixedColor": "blue"
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 32.05
+                    },
+                    {
+                      "color": "light-green",
+                      "value": 34.05
+                    },
+                    {
+                      "color": "green",
+                      "value": 38.05
+                    },
+                    {
+                      "color": "light-green",
+                      "value": 41.05
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 42.05
+                    },
+                    {
+                      "color": "red",
+                      "value": 44.05
+                    }
+                  ]
                 }
               }
             ]
           }
         ]
       },
-      "description": "SC-QAM nach BK-Tabelle, Spalte DOCSIS 3.1 Modem. OFDMA neutral (blau): Die Tabelle gibt dafür keine Werte vor."
+      "description": "Farben nach BK-Tabelle, Spalte DOCSIS 3.1 Modem. Der OFDMA-Pegel ist auf 1,6 MHz statt 6,4 MHz bezogen und liegt dadurch 6 dB niedriger; seine Schwellen sind entsprechend um 6 dB verschoben."
     },
     {
       "id": 14,
@@ -1578,7 +1607,8 @@
           }
         },
         "overrides": []
-      }
+      },
+      "description": "Farbflächen gelten für SC-QAM. Der OFDMA-Kanal (1,6-MHz-Bezug) liegt systembedingt rund 6 dB tiefer."
     },
     {
       "id": 20,

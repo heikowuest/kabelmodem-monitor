@@ -12,6 +12,9 @@ TH_SNR = steps("red", (30.05, "yellow"), (32.05, "light-green"), (33.05, "green"
 TH_DS_POWER_1024 = steps("red", (-5.95, "yellow"), (-3.95, "light-green"), (-1.95, "green"), (15.05, "light-green"), (20.05, "yellow"), (22.05, "red"))
 TH_MER_1024 = steps("red", (36.05, "yellow"), (38.05, "light-green"), (39.05, "green"))
 TH_US = steps("red", (38.05, "yellow"), (40.05, "light-green"), (44.05, "green"), (47.05, "light-green"), (48.05, "yellow"), (50.05, "red"))
+# OFDMA-Pegel ist auf 1,6 MHz statt 6,4 MHz bezogen: 10*log10(6,4/1,6) = 6 dB niedriger als SC-QAM
+OFDMA_OFFSET = 6.0
+TH_US_OFDMA = {"mode": "absolute", "steps": [dict(st, value=None if st["value"] is None else round(st["value"] - OFDMA_OFFSET, 2)) for st in TH_US["steps"]]}
 
 pid = 0
 def nid():
@@ -104,8 +107,9 @@ panels += [
 y += 9
 panels += [
     bars("Upstream-Sendepegel je Kanal (dBmV)", "docsis_us", "power_dbmv", 0, y, 8, TH_US, "dBmV", 30, 55,
-         "ofdma", [{"id": "color", "value": {"mode": "fixed", "fixedColor": "blue"}}],
-         desc="SC-QAM nach BK-Tabelle, Spalte DOCSIS 3.1 Modem. OFDMA neutral (blau): Die Tabelle gibt dafür keine Werte vor."),
+         "ofdma", [{"id": "thresholds", "value": TH_US_OFDMA}],
+         desc="Farben nach BK-Tabelle, Spalte DOCSIS 3.1 Modem. Der OFDMA-Pegel ist auf 1,6 MHz statt 6,4 MHz bezogen und "
+              "liegt dadurch 6 dB niedriger; seine Schwellen sind entsprechend um 6 dB verschoben."),
     {"id": nid(), "type": "table", "title": "Ereignisprotokoll", "datasource": DS, "gridPos": {"x": 8, "y": y, "w": 16, "h": 9},
      "targets": [tgt('SELECT "level_num" AS "Level", "count" AS "Anzahl", "text" AS "Meldung" FROM "modem_events" WHERE $timeFilter ORDER BY time DESC LIMIT 300', fmt="table")],
      "options": {"showHeader": True, "cellHeight": "sm"},
@@ -132,7 +136,8 @@ panels += [
     ], 0, y, 12, draw="bars", decimals=0,
        desc="Zuwachs der Zähler je Intervall. Korrigierte OFDM-Codewörter sind ausgelassen (LDPC korrigiert dort ständig, das ist normal)."),
     ts("Upstream-Sendepegel (dBmV)", [tgt('SELECT mean("power_dbmv") FROM "docsis_us" WHERE $timeFilter GROUP BY time($__interval), "channel" fill(none)', alias="$tag_channel")],
-       12, y, 12, unit="dBmV", th=TH_US, th_style="area"),
+       12, y, 12, unit="dBmV", th=TH_US, th_style="area",
+       desc="Farbflächen gelten für SC-QAM. Der OFDMA-Kanal (1,6-MHz-Bezug) liegt systembedingt rund 6 dB tiefer."),
 ]
 y += 9
 panels += [
@@ -152,7 +157,7 @@ dash = {
                   "type": "datasource", "pluginId": "influxdb", "pluginName": "InfluxDB"}],
     "__requires": [{"type": "datasource", "id": "influxdb", "name": "InfluxDB", "version": "1.0.0"}],
     "title": "Kabelmodem (DOCSIS)", "uid": "kabelmodem-docsis", "tags": ["docsis", "modem", "vodafone"],
-    "timezone": "browser", "editable": True, "refresh": "1m", "schemaVersion": 39, "version": 2,
+    "timezone": "browser", "editable": True, "refresh": "1m", "schemaVersion": 39, "version": 3,
     "time": {"from": "now-24h", "to": "now"}, "graphTooltip": 1,
     "annotations": {"list": [{"builtIn": 1, "datasource": {"type": "grafana", "uid": "-- Grafana --"}, "enable": True, "hide": True,
                               "iconColor": "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard"},

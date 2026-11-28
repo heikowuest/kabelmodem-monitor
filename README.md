@@ -40,10 +40,13 @@ Farbstufen nach der Tabelle „Grenzwerte digital (DVB-C und HSI/Phone) in BK-Ne
 | SNR SC-QAM | 256QAM | ≥ 33,1 dB |
 | MER OFDM | 1024QAM | ≥ 39,1 dB |
 | Upstream-Sendepegel SC-QAM | DOCSIS-3.1-Modem | 44,1 … 47,0 dBmV |
-| Upstream OFDMA | – | keine Vorgabe, neutral dargestellt |
+| Upstream-Sendepegel OFDMA | DOCSIS-3.1-Modem, 6 dB verschoben | 38,1 … 41,0 dBmV |
 
 Das Modem meldet die QAM-Stufe des OFDM-Kanals nicht; 1024QAM ist eine Annahme
 (im Windows-Dashboard über `OFDM_QAM` in `dashboard.html` änderbar).
+Der OFDMA-Sendepegel ist auf 1,6 MHz Bandbreite bezogen (SC-QAM: 6,4 MHz) und liegt daher
+rund 6 dB niedriger; die Tabelle hat dafür keine eigene Spalte, deshalb werden die Grenzen
+der DOCSIS-3.1-Spalte um 6 dB verschoben angewendet.
 Korrigierte Codewörter werden nur für SC-QAM ausgewertet: Auf OFDM korrigiert LDPC
 ständig Millionen Codewörter, das ist normal.
 
